@@ -12,8 +12,12 @@ int main() {
     long long int Credit_Card_Number;
     bool userInput = true;
     bool nonNum = false;
+    bool nonLength = false;
+    int digits;
+    cout << "enter the amount of digits: ";
+    cin >> digits;
     do {
-        cout << endl << "Enter a 16-digit credit card number or Q to quit: ";
+        cout << endl << "Please enter a " << digits << "-digit number or Q to quit: ";
         cin >> Credit_Card_Info;
 
         // Check if the user wants to quit
@@ -27,14 +31,15 @@ int main() {
             nonNum = true;
         }
 
-        if (Credit_Card_Info.length() != 16 && !nonNum) {
-            cout << "Error: Please enter a 16-digit number." << endl;
+        if (Credit_Card_Info.length() != digits && !nonNum) {
+            cout << "Error: Please enter a " << digits << "-digit number." << endl;
+            nonLength = true;
         }
 
         stringstream ss(Credit_Card_Info);
         ss >> Credit_Card_Number;
 
-        if (Credit_Card_Number/1000000000000000 > 0) {
+        if (!nonNum && !nonLength) {
             if (creditCardCheck(Credit_Card_Number)) {
                 cout << "This is a valid card." << endl;
             }
@@ -43,6 +48,7 @@ int main() {
             }
         }
         nonNum = false;
+        nonLength = false;
     } while (userInput);
 
     return 0;
@@ -71,5 +77,6 @@ bool creditCardCheck(long long int Credit_Card_Number) {
 }
 
 bool isNumber(char checkForNumber) {
-    return (checkForNumber >= '0' && checkForNumber <= '9');
+   
+ return (checkForNumber >= '0' && checkForNumber <= '9');
 }
