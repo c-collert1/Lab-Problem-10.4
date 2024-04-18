@@ -1,18 +1,49 @@
 #include <iostream>
+#include <string>
+#include <sstream>
+#include <algorithm>
 using namespace std;
 
 bool creditCardCheck(long long int Credit_Card_Number);
+bool isNumber(char checkForNumber);
 
 int main() {
-   //had to make variable something called "long long" for extra bits
-    long long int Credit_Card_Number = 4010046804271206;
+    string Credit_Card_Info;
+    long long int Credit_Card_Number;
+    bool userInput = true;
+    bool nonNum = false;
+    do {
+        cout << endl << "Enter a 16-digit credit card number or Q to quit: ";
+        cin >> Credit_Card_Info;
 
-    if (creditCardCheck(Credit_Card_Number)) {
-        cout << "This is a valid card\n";
-    }
-    else {
-        cout << "This is not a valid card\n";
-    }
+        // Check if the user wants to quit
+        if (Credit_Card_Info == "Q" || Credit_Card_Info == "q") {
+            userInput = false;
+            break;
+        }
+
+        if (!all_of(Credit_Card_Info.begin(), Credit_Card_Info.end(), isNumber)) {
+            cout << "Error: Please enter only numeric values." << endl;
+            nonNum = true;
+        }
+
+        if (Credit_Card_Info.length() != 16 && !nonNum) {
+            cout << "Error: Please enter a 16-digit number." << endl;
+        }
+
+        stringstream ss(Credit_Card_Info);
+        ss >> Credit_Card_Number;
+
+        if (Credit_Card_Number/1000000000000000 > 0) {
+            if (creditCardCheck(Credit_Card_Number)) {
+                cout << "This is a valid card." << endl;
+            }
+            else {
+                cout << "This is not a valid card." << endl;
+            }
+        }
+        nonNum = false;
+    } while (userInput);
 
     return 0;
 }
@@ -29,16 +60,16 @@ bool creditCardCheck(long long int Credit_Card_Number) {
         if (secondDigit) {
             temp *= 2;
         }
+
         Sum += temp / 10;
         Sum += temp % 10;
 
         secondDigit = !secondDigit;
     }
-   
-    if (Sum % 10 == 0) {
-        return true;
-    }
-    else {
-        return false;
-    }
+
+    return (Sum % 10 == 0);
+}
+
+bool isNumber(char checkForNumber) {
+    return (checkForNumber >= '0' && checkForNumber <= '9');
 }
