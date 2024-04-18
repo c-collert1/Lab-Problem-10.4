@@ -1,54 +1,44 @@
 #include <iostream>
-#include <cmath>
 using namespace std;
 
-bool creditCardCheck(int Credit_Card_Number, int Digits);
+bool creditCardCheck(long long int Credit_Card_Number);
+
 int main() {
+   //had to make variable something called "long long" for extra bits
+    long long int Credit_Card_Number = 4010046804271206;
 
-	int Counter = 0;
-	int Sum = 0;
-	int Credit_Card;
-	int Digits = 8;
-	int Second_Digit = 0;
+    if (creditCardCheck(Credit_Card_Number)) {
+        cout << "This is a valid card\n";
+    }
+    else {
+        cout << "This is not a valid card\n";
+    }
 
-
-	cout << "Please enter your Credit Card number: ";
-	cin >> Credit_Card;
-
-	if (creditCardCheck(Credit_Card, Digits)) {
-		cout << "valid credit card";
-	}
-	else {
-		cout << "invalid credit card";
-	}
+    return 0;
 }
 
-bool creditCardCheck(int Credit_Card_Number, int Digits) {
-	int Sum = 0;
-	int Second_Digit;
-	int Counter = 0;
-	while (Credit_Card_Number > 0) {
-		Digits = Credit_Card_Number % 10;
-		Credit_Card_Number /= 10;
-		if (Counter % 2 == 0) {
-			Sum = Sum + Digits;
+bool creditCardCheck(long long int Credit_Card_Number) {
+    int Digits = 16;
+    int Sum = 0;
+    bool secondDigit = false;
 
-		}
-		else {
-			Second_Digit = Digits * 2;
-			if (Second_Digit >= 10) {
-				Second_Digit = 1 + Second_Digit % 10;
-			}
-			Sum = Sum + Second_Digit;
-		}
+    for (int i = Digits - 1; i >= 0; i--) {
+        int temp = Credit_Card_Number % 10;
+        Credit_Card_Number /= 10;
 
-		Counter++;
+        if (secondDigit) {
+            temp *= 2;
+        }
+        Sum += temp / 10;
+        Sum += temp % 10;
 
-	}
-	if (Sum % 10 == 0) {
-		return true;
-	}
-	else {
-		return false;
-	}
+        secondDigit = !secondDigit;
+    }
+   
+    if (Sum % 10 == 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
